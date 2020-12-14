@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
 import Modal from './Components/Modal/Modal';
+import Button from './Components/Button';
 
 class App extends Component {
   state = {
@@ -30,6 +31,7 @@ class App extends Component {
         <ToastContainer position="bottom-center" autoClose={2500} />
         <Searchbar onSubmit={getImgCollection} />
         <Modal onClose={toggleModal} />
+        <Button />
       </div>
     );
   }
