@@ -1,11 +1,11 @@
 import React from 'react';
 import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
 import Modal from './Components/Modal/Modal';
 import Button from './Components/Button';
+import Loader from './Components/Loader';
 
 class App extends Component {
   state = {
@@ -30,7 +30,8 @@ class App extends Component {
       <div className={s.app}>
         <ToastContainer position="bottom-center" autoClose={2500} />
         <Searchbar onSubmit={getImgCollection} />
-        <Modal onClose={toggleModal} />
+        {/* <Modal onClose={toggleModal} /> */}
+        <Loader />
         <Button />
       </div>
     );
