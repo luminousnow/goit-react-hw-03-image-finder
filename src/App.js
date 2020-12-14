@@ -1,12 +1,15 @@
 import React from 'react';
 import { Component } from 'react';
-import Searchbar from './Searchbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import s from './App.module.css';
+import Searchbar from './Searchbar';
+import Modal from './Modal/Modal';
 
 class App extends Component {
   state = {
     imgCollection: [],
+    showModal: false,
     loader: false,
     page: 0,
   };
@@ -15,11 +18,18 @@ class App extends Component {
     this.setState({ imgCollection });
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
   render() {
+    const { getImgCollection, toggleModal } = this;
+
     return (
-      <div className="app">
-        <Searchbar onSubmit={this.getImgCollection} />
+      <div className={s.app}>
         <ToastContainer position="bottom-center" autoClose={2500} />
+        <Searchbar onSubmit={getImgCollection} />
+        <Modal onClose={toggleModal} />
       </div>
     );
   }
