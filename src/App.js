@@ -3,9 +3,9 @@ import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
-import Modal from './Components/Modal/Modal';
+// import Modal from './Components/Modal/Modal';
 import Button from './Components/Button';
-import Loader from './Components/Loader';
+import Loader from 'react-loader-spinner';
 
 class App extends Component {
   state = {
@@ -31,7 +31,7 @@ class App extends Component {
         <ToastContainer position="bottom-center" autoClose={2500} />
         <Searchbar onSubmit={getImgCollection} />
         {/* <Modal onClose={toggleModal} /> */}
-        <Loader />
+        <Loader type="Grid" color="#00BFFF" height={80} width={80} />
         <Button />
       </div>
     );
