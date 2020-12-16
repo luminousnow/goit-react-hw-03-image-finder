@@ -11,21 +11,20 @@ export class GetGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevImgName = prevProps.imgName;
     const newImgName = this.props.imgName;
-    const { KEY, URL, perPage } = this.state;
-    let { pageNum } = this.state;
+    const { KEY, URL, pageNum, perPage } = this.state;
 
     if (prevImgName !== newImgName) {
-      pageNum = 1;
+      this.setState({ pageNum: 1 });
+      this.props.switchLoader(true);
+
       fetch(
         `${URL}?q=${newImgName}&page=${pageNum}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=${perPage}`,
       )
         .then(res => res.json())
-        .then(
-          imgCollection => this.props.onFetch(imgCollection.hits),
-          //   this.setState({ imgCollection: imgCollection.hits }),
-        );
-
-      //   this.props.onFetch(this.state.imgCollection);
+        .then(imgCollection => this.props.onFetch(imgCollection.hits))
+        .finally(() => {
+          this.props.switchLoader(false);
+        });
     }
   }
 
