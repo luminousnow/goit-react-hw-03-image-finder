@@ -12,6 +12,7 @@ class App extends Component {
     imgName: '',
     imgCollection: null,
     showModal: false,
+    showLoader: false,
   };
 
   // отримує і записує в imgName назву зображення
@@ -24,21 +25,30 @@ class App extends Component {
     this.setState({ imgCollection: apiImgCollection });
   };
 
-  // змінює стан showLoader на протилежний
+  // змінює стан showModal
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
+  // змінює стан showLoader
+  switchLoader = switchStatus => {
+    this.setState({ showLoader: switchStatus });
+  };
+
   render() {
-    const { getImgName, getImgCollection, toggleModal } = this;
-    const { imgName, showModal } = this.state;
+    const { getImgName, getImgCollection, toggleModal, switchLoader } = this;
+    const { imgName, imgCollection, showModal, showLoader } = this.state;
 
     return (
       <div className={s.app}>
         <ToastContainer position="bottom-center" autoClose={2500} />
         <Searchbar onSubmit={getImgName} />
-        <GetGallery imgName={imgName} onFetch={getImgCollection} />
-        <ImageGallery />
+        <GetGallery
+          imgName={imgName}
+          onFetch={getImgCollection}
+          switchLoader={switchLoader}
+        />
+        <ImageGallery imgGallery={imgCollection} showLoader={showLoader} />
 
         {/* рендерить Modal по умові */}
         {showModal && <Modal onClose={toggleModal} />}
