@@ -45,8 +45,13 @@ class App extends Component {
       <div className={s.app}>
         <ToastContainer position="bottom-center" autoClose={2500} />
         <Searchbar onSubmit={getImgName} />
+
+        {/* рендерить ImageGallery по умові */}
+        {imgCollection && <ImageGallery imgGallery={imgCollection} />}
+
         <GetGallery
           imgName={imgName}
+          imgCollection={imgCollection}
           onFetch={getImgCollection}
           switchLoader={switchLoader}
         />
@@ -60,14 +65,12 @@ class App extends Component {
             width={80}
           />
         )}
-        {/* рендерить ImageGallery по умові */}
-        {imgCollection && <ImageGallery imgGallery={imgCollection} />}
 
         {/* рендерить Modal по умові */}
         {showModal && <Modal onClose={toggleModal} />}
 
         {/* рендерить Button по умові */}
-        {imgCollection && <Button />}
+        {/* {imgCollection && <Button />} */}
       </div>
     );
   }
