@@ -5,46 +5,44 @@ import s from './Searchbar.module.css';
 class Searchbar extends Component {
   state = {
     imgName: '',
-    imgCollection: [],
-    page: 0,
-    loader: false,
   };
 
-  componentDidMount() {}
-
-  componentDidUpdate() {}
-
+  // зміна state при зміні поля пошуку
   onNameChange = e => {
     this.setState({ imgName: e.currentTarget.value.toLowerCase() });
   };
 
-  // При сабміті форми
+  // Cабміт форми
   onSubmitPress = e => {
+    const { imgName } = this.state;
+
     e.preventDefault();
 
     // перевірка чи поле не є пустим
-    if (this.state.imgName.trim() === '') {
-      return toast.error('Введіть назву зображення');
+    if (imgName.trim() === '') {
+      return toast.error('Ведіть назву зображення');
     }
 
     // надсилає imgCollection у Арр
-    this.props.onSubmit(this.state.imgCollection);
+    this.props.onSubmit(imgName);
 
     // очищає поле пошуку Зображень
     this.setState({ imgName: '' });
   };
 
   render() {
+    const { onSubmitPress, onNameChange } = this;
+
     return (
       <header className={s.searchbar}>
-        <form onSubmit={this.onSubmitPress} className={s.searchForm}>
+        <form onSubmit={onSubmitPress} className={s.searchForm}>
           <button type="submit" className={s.searchForm__button}>
             <span className={s.searchForm__button__label}>Search</span>
           </button>
 
           <input
             value={this.state.imgName}
-            onChange={this.onNameChange}
+            onChange={onNameChange}
             className={s.searchForm__input}
             type="text"
             autoComplete="off"

@@ -3,36 +3,45 @@ import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
-// import Modal from './Components/Modal/Modal';
-import Button from './Components/Button';
-import Loader from 'react-loader-spinner';
+import Modal from './Components/Modal/Modal';
+import ImageGallery from './Components/ImageGallery/ImageGallery';
+import GetGallery from './api/GetGallery';
 
 class App extends Component {
   state = {
-    imgCollection: [],
+    imgName: '',
+    imgCollection: null,
     showModal: false,
-    loader: false,
-    page: 0,
   };
 
-  getImgCollection = imgCollection => {
-    this.setState({ imgCollection });
+  // отримує і записує в imgName назву зображення
+  getImgName = submitImgName => {
+    this.setState({ imgName: submitImgName });
   };
 
+  // отримує і записує в imgCollection масив зображень
+  getImgCollection = apiImgCollection => {
+    this.setState({ imgCollection: apiImgCollection });
+  };
+
+  // змінює стан showLoader на протилежний
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   render() {
-    const { getImgCollection, toggleModal } = this;
+    const { getImgName, getImgCollection, toggleModal } = this;
+    const { imgName, showModal } = this.state;
 
     return (
       <div className={s.app}>
         <ToastContainer position="bottom-center" autoClose={2500} />
-        <Searchbar onSubmit={getImgCollection} />
-        {/* <Modal onClose={toggleModal} /> */}
-        <Loader type="Grid" color="#00BFFF" height={80} width={80} />
-        <Button />
+        <Searchbar onSubmit={getImgName} />
+        <GetGallery imgName={imgName} onFetch={getImgCollection} />
+        <ImageGallery />
+
+        {/* рендерить Modal по умові */}
+        {showModal && <Modal onClose={toggleModal} />}
       </div>
     );
   }
@@ -43,7 +52,7 @@ class App extends Component {
 // Галерея
 // Елемент Галереї
 // Пошук зображення https://youtu.be/xoG3l2PgiYY?t=343
-// Лодер
+// Лодер https://youtu.be/xoG3l2PgiYY?t=2609
 // Модалка https://www.youtube.com/watch?v=w6MW1szKuT4&feature=youtu.be&t=1383
 
 export default App;
