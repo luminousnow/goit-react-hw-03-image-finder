@@ -3,9 +3,11 @@ import s from './ImageGalleryItem.molule.css';
 
 export class ImageGalleryItem extends Component {
   render() {
+    const smlImg = this.props.smlImg;
+    const lrgImg = this.props.lrgImg;
     return (
       <li className={s.imageGalleryItem}>
-        <img src="" alt="" className={s.imageGalleryItem__image} />
+        <img src={smlImg} alt="" className={s.imageGalleryItem__image} />
       </li>
     );
   }
