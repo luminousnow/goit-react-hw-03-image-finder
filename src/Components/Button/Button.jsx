@@ -7,7 +7,7 @@ export class Button extends Component {
   };
   render() {
     return (
-      <div>
+      <div className={s.button__box}>
         <button className={s.button} type="button">
           Load more
         </button>
