@@ -6,6 +6,8 @@ import Searchbar from './Components/Searchbar/Searchbar';
 import Modal from './Components/Modal/Modal';
 import ImageGallery from './Components/ImageGallery/ImageGallery';
 import GetGallery from './api/GetGallery';
+import Button from './Components/Button/Button';
+import Loader from 'react-loader-spinner';
 
 class App extends Component {
   state = {
@@ -48,10 +50,24 @@ class App extends Component {
           onFetch={getImgCollection}
           switchLoader={switchLoader}
         />
-        <ImageGallery imgGallery={imgCollection} showLoader={showLoader} />
+        {/* рендерить Loader по умові */}
+        {showLoader && (
+          <Loader
+            className={s.loader}
+            type="Grid"
+            color="#00BFFF"
+            height={80}
+            width={80}
+          />
+        )}
+        {/* рендерить ImageGallery по умові */}
+        {imgCollection && <ImageGallery imgGallery={imgCollection} />}
 
         {/* рендерить Modal по умові */}
         {showModal && <Modal onClose={toggleModal} />}
+
+        {/* рендерить Button по умові */}
+        {imgCollection && <Button />}
       </div>
     );
   }
