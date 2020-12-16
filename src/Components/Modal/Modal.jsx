@@ -13,12 +13,14 @@ export class Modal extends Component {
     window.removeEventListener('keydown', this.hendleKeyDown);
   }
 
+  //  закриває модалку по натисканню Escape
   hendleKeyDown = e => {
     if (e.code === 'Escape') {
       this.props.onClose();
     }
   };
 
+  // закриває модалку по кліку на Backdrop
   hendleBackdropClick = e => {
     if (e.currentTarget === e.target) {
       this.props.onClose();
@@ -30,6 +32,7 @@ export class Modal extends Component {
       <div className={s.overlay} onClick={this.hendleBackdropClick}>
         <div className={s.modal}>
           <img src="" alt="" />
+          <p>Це моя модалка</p>
         </div>
       </div>,
       modalRoot,
