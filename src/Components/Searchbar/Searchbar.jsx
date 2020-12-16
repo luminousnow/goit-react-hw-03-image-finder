@@ -25,9 +25,6 @@ class Searchbar extends Component {
 
     // надсилає imgCollection у Арр
     this.props.onSubmit(imgName);
-
-    // очищає поле пошуку Зображень
-    this.setState({ imgName: '' });
   };
 
   render() {
