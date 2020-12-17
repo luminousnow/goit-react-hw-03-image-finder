@@ -5,14 +5,11 @@ import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
 import Modal from './Components/Modal/Modal';
 import ImageGallery from './Components/ImageGallery/ImageGallery';
-import GetGallery from './api/GetGallery';
-import Button from './Components/Button/Button';
 import Loader from 'react-loader-spinner';
 
 class App extends Component {
   state = {
     imgName: '',
-    imgCollection: null,
     showModal: false,
     showLoader: false,
   };
@@ -20,11 +17,6 @@ class App extends Component {
   // отримує і записує в imgName назву зображення
   getImgName = submitImgName => {
     this.setState({ imgName: submitImgName });
-  };
-
-  // отримує і записує в imgCollection масив зображень
-  getImgCollection = apiImgCollection => {
-    this.setState({ imgCollection: apiImgCollection });
   };
 
   // змінює стан showModal
@@ -38,8 +30,8 @@ class App extends Component {
   };
 
   render() {
-    const { getImgName, getImgCollection, toggleModal, switchLoader } = this;
-    const { imgName, imgCollection, showModal, showLoader } = this.state;
+    const { getImgName, toggleModal, switchLoader } = this;
+    const { imgName, showModal, showLoader } = this.state;
 
     return (
       <div className={s.app}>
@@ -47,14 +39,8 @@ class App extends Component {
         <Searchbar onSubmit={getImgName} />
 
         {/* рендерить ImageGallery по умові */}
-        {imgCollection && <ImageGallery imgGallery={imgCollection} />}
+        <ImageGallery imgName={imgName} switchLoader={switchLoader} />
 
-        <GetGallery
-          imgName={imgName}
-          imgCollection={imgCollection}
-          onFetch={getImgCollection}
-          switchLoader={switchLoader}
-        />
         {/* рендерить Loader по умові */}
         {showLoader && (
           <Loader
@@ -68,20 +54,16 @@ class App extends Component {
 
         {/* рендерить Modal по умові */}
         {showModal && <Modal onClose={toggleModal} />}
-
-        {/* рендерить Button по умові */}
-        {/* {imgCollection && <Button />} */}
       </div>
     );
   }
 }
 
-// Архітектура АРР
-// Searchbar https://youtu.be/xoG3l2PgiYY?t=1352
-// Галерея
-// Елемент Галереї
-// Пошук зображення https://youtu.be/xoG3l2PgiYY?t=343
-// Лодер https://youtu.be/xoG3l2PgiYY?t=2609
+// починати завантаження нової коллекції з 1
+// переміщувати екран при кліку на кнопку Лоад мо
+// Приховати розмітку в залежності від довжини колекції
+// Показувати кнопку в залежності від довжини масиву
+// error https://youtu.be/xoG3l2PgiYY?t=3024
 // Модалка https://www.youtube.com/watch?v=w6MW1szKuT4&feature=youtu.be&t=1383
 
 export default App;
