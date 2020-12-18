@@ -16,23 +16,24 @@ export class Modal extends Component {
   //  закриває модалку по натисканню Escape
   hendleKeyDown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      this.props.toggleModal();
     }
   };
 
   // закриває модалку по кліку на Backdrop
   hendleBackdropClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.onClose();
+      this.props.toggleModal();
     }
   };
 
   render() {
+    const { largeImg, altImg } = this.props;
+
     return createPortal(
       <div className={s.overlay} onClick={this.hendleBackdropClick}>
         <div className={s.modal}>
-          <img src="" alt="" />
-          <p>Це моя модалка</p>
+          <img src={largeImg} alt={altImg} />
         </div>
       </div>,
       modalRoot,

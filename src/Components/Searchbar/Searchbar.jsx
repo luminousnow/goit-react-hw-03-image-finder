@@ -13,7 +13,7 @@ class Searchbar extends Component {
   };
 
   // Cабміт форми
-  onSubmitPress = e => {
+  onSubmitForm = e => {
     const { imgName } = this.state;
 
     e.preventDefault();
@@ -28,11 +28,11 @@ class Searchbar extends Component {
   };
 
   render() {
-    const { onSubmitPress, onNameChange } = this;
+    const { onSubmitForm, onNameChange } = this;
 
     return (
       <header className={s.searchbar}>
-        <form onSubmit={onSubmitPress} className={s.searchForm}>
+        <form onSubmit={onSubmitForm} className={s.searchForm}>
           <button type="submit" className={s.searchForm__button}>
             <span className={s.searchForm__button__label}>Search</span>
           </button>

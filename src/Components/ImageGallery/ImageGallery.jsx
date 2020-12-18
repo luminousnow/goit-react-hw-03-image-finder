@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import Loader from 'react-loader-spinner';
 import fetchGallery from '../../api/apiServise';
 import Button from '../Button/Button';
+import ErrorView from '../ErrorView';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
 
@@ -9,69 +11,112 @@ export class ImageGallery extends Component {
     imgCollection: [],
     pageNum: 1,
     error: null,
-    showLoader: false,
+    status: 'idle',
   };
 
-  // Сабміт при новому пошуку
+  // Новий Сабміт
   componentDidUpdate(prevProps, prevState) {
     const prevImgName = prevProps.imgName;
+    const prevPageNum = prevState.pageNum;
     const currentImgName = this.props.imgName;
     const { pageNum } = this.state;
 
+    // якщо різні імена то скидає Колекцію
     if (prevImgName !== currentImgName) {
-      // this.setState({ pageNum: 1 }); // сюди приходить перший проп сторінки від Арр
-      this.setState({ showLoader: true });
+      this.setState({ imgCollection: [], pageNum: 1 });
+    }
+
+    // При зміні імені
+    if (prevImgName !== currentImgName || prevPageNum !== pageNum) {
+      this.setState({ status: 'pending' });
 
       // Вирішити проблему з проставленням по дефолту pageNum: 1 і imgCollection: []
       fetchGallery(currentImgName, pageNum)
         .then(gallery => {
           this.setState(prevState => ({
             imgCollection: [...prevState.imgCollection, ...gallery.hits],
+            status: 'resolved',
           }));
         })
-        .catch(error => this.setState(error))
-        .finally(() => {
-          this.setState({ showLoader: false });
-        });
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
+
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
-  // клік на Лоад мо
-  // fetchGallery = () => {
-  //   apiServise()
-  //     .then(apiImgCollection => {
-  //       const hits = apiImgCollection.hits;
+  onLoadMoreBtnClick = () => {
+    this.setState(prevState => ({
+      pageNum: prevState.pageNum + 1,
+    }));
+  };
 
-  //       this.props.onFetch(hits);
-  //       this.setState(prevState => ({ pageNum: prevState.pageNum + 1 }));
-  //     })
-  //     .catch(error => this.setState(error))
-  //     .finally(() => {
-  //       this.props.switchLoader(false);
-  //     });
-  // };
+  onImageClick = e => {
+    const originalImage = e.target.dataset.original;
+    // console.log(originalImage);
+    const altImage = e.target.alt;
+    // console.log(altImage);
+    this.props.getModalData(originalImage, altImage);
+  };
 
   render() {
-    const { imgCollection, error } = this.state;
-    console.log(imgCollection);
-    return (
-      <>
-        <ul className={s.imageGallery}>
-          {imgCollection.map(({ id, webformatURL, largeImageURL }) => (
-            <ImageGalleryItem
-              key={id}
-              smlImg={webformatURL}
-              lrgImg={largeImageURL}
-            />
-          ))}
-          {/* рендарить повідомлення помилки по умові */}
-          {error && <h1>{error.message}</h1>}
+    const { imgCollection, error, status } = this.state;
+    const { onLoadMoreBtnClick, onImageClick } = this;
+
+    if (status === 'idle') {
+      return (
+        <div className={s.idle}>
+          Давайте розпочнемо. Напишіть назву зображення в полі вище та
+          розпочніть пошук
+        </div>
+      );
+    }
+
+    if (status === 'pending') {
+      return (
+        <Loader
+          className={s.loader}
+          type="Grid"
+          color="#00BFFF"
+          height={80}
+          width={80}
+        />
+      );
+    }
+
+    if (imgCollection.length === 0 && status === 'resolved') {
+      return <ErrorView />;
+    }
+
+    if (status === 'resolved') {
+      return (
+        <>
+          <ul className={s.imageGallery}>
+            {/* {console.log(imgCollection)} */}
+            {imgCollection.map(({ webformatURL, largeImageURL, tags }, i) => (
+              <ImageGalleryItem
+                key={i}
+                smallImg={webformatURL}
+                largeImg={largeImageURL}
+                alt={tags}
+                onClick={onImageClick}
+              />
+            ))}
+          </ul>
 
           {/* рендерить Button по умові */}
-        </ul>
-        {imgCollection.length !== 0 && <Button />}
-      </>
-    );
+          {imgCollection.length > 11 && (
+            <Button onLoadMoreBtnClick={onLoadMoreBtnClick} />
+          )}
+        </>
+      );
+    }
+
+    if (status === 'rejected') {
+      return <ErrorView errorMessage={error.message} />;
+    }
   }
 }
 
