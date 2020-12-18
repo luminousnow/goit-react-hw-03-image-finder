@@ -5,13 +5,13 @@ import s from './App.module.css';
 import Searchbar from './Components/Searchbar/Searchbar';
 import Modal from './Components/Modal/Modal';
 import ImageGallery from './Components/ImageGallery/ImageGallery';
-import Loader from 'react-loader-spinner';
 
 class App extends Component {
   state = {
     imgName: '',
     showModal: false,
-    showLoader: false,
+    lrgImg: '',
+    altImg: '',
   };
 
   // отримує і записує в imgName назву зображення
@@ -24,14 +24,17 @@ class App extends Component {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
-  // змінює стан showLoader
-  switchLoader = switchStatus => {
-    this.setState({ showLoader: switchStatus });
+  getModalData = (gettinglargeImg, gettingAltImg) => {
+    this.setState({
+      lrgImg: gettinglargeImg,
+      altImg: gettingAltImg,
+      showModal: true,
+    });
   };
 
   render() {
-    const { getImgName, toggleModal, switchLoader } = this;
-    const { imgName, showModal, showLoader } = this.state;
+    const { getImgName, toggleModal, getModalData } = this;
+    const { imgName, showModal, lrgImg, altImg } = this.state;
 
     return (
       <div className={s.app}>
@@ -39,21 +42,12 @@ class App extends Component {
         <Searchbar onSubmit={getImgName} />
 
         {/* рендерить ImageGallery по умові */}
-        <ImageGallery imgName={imgName} switchLoader={switchLoader} />
-
-        {/* рендерить Loader по умові */}
-        {showLoader && (
-          <Loader
-            className={s.loader}
-            type="Grid"
-            color="#00BFFF"
-            height={80}
-            width={80}
-          />
-        )}
+        <ImageGallery imgName={imgName} getModalData={getModalData} />
 
         {/* рендерить Modal по умові */}
-        {showModal && <Modal onClose={toggleModal} />}
+        {showModal && (
+          <Modal toggleModal={toggleModal} largeImg={lrgImg} altImg={altImg} />
+        )}
       </div>
     );
   }
